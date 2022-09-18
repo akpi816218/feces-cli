@@ -1,8 +1,7 @@
 #!/bin/bash
 
 help () {
-	printf $(curl -s https://raw.githubusercontent.com/akpi816218/feces/gitmaster/help.txt)
-	# cat help.txt
+	curl -s https://raw.githubusercontent.com/akpi816218/feces/gitmaster/help.txt
 	return
 }
 
