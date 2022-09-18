@@ -1,0 +1,14 @@
+#!/bin/bash
+
+help () {
+	echo $(curl -s https://github.com/akpi816218/feces/permalink-to-help)
+	return
+}
+
+if [[ $# -lt 1 ]] ; then
+	help
+	exit 0
+elif [[ $1 -eq "help" ]] ; then
+	help
+	exit 0
+fi
