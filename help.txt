@@ -1,8 +1,8 @@
 feces
-  compost    Permanently removes old files
-  flush      Permanently removes all files
-  help       Displays this help
-  pie        Lists all files in the cow pie
-  plop       Adds a file to the cow pie
-  plunge     Restores a file
+    compost    Permanently removes old files
+    flush      Permanently removes all files
+    help       Displays this help
+    pie        Lists all files in the cow pie
+    plop       Adds a file to the cow pie
+    plunge     Restores a file
 Type `feces help <command>` to get detailed help about a specific command.
