@@ -7,3 +7,4 @@ feces compost <number> <unit>
     w being weeks,
     m being months,
     y being years
+  Will ask for confirmation

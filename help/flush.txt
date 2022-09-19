@@ -1,0 +1,3 @@
+feces flush
+  Permanently removes all files from the cow pie
+  Will ask for confirmation before flushing
