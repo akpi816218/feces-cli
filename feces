@@ -34,6 +34,23 @@ case $1 in
 		else
 			case $2 in
 				"h")
+					find ~/.feces/files -mmin -$($1 * 60) -exec rm -r {} \;
+					find ~/.feces/info -mmin -$($1 * 60) -exec rm -r {} \;
+					;;
+				"d")
+					find ~/.feces/files -mtime -$1 -exec rm -r {} \;
+					find ~/.feces/info -mtime -$1 -exec rm -r {} \;
+					;;
+				"w")
+					find ~/.feces/files -mtime -$($1 * 24 * 7) -exec rm -r {} \;
+					find ~/.feces/info -mtime -$($1 * 24 * 7) -exec rm -r {} \;
+					;;
+				"m")
+					find ~/.feces/files -mtime -$($1 * 24 * 30) -exec rm -r {} \;
+					find ~/.feces/info -mtime -$($1 * 24 * 30) -exec rm -r {} \;
+					;;
+				*)
+					printf "Invalid unit\n"
 					;;
 			esac
 		fi

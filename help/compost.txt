@@ -5,6 +5,5 @@ feces compost <number> <unit>
     h being hours,
     d being days,
     w being weeks,
-    m being months,
-    y being years
+    m being months
   Will ask for confirmation
