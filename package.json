@@ -15,7 +15,7 @@
 	"license": "ISC",
 	"dependencies": {
 		"@types/mv": "^2.1.2",
-		"chalk": "^5.2.0",
+		"colors": "^1.4.0",
 		"jsoning": "^0.13.23",
 		"mv": "^2.1.1",
 		"yargs": "^17.7.2"
