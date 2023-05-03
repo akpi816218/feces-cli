@@ -1,0 +1,27 @@
+{
+	"name": "feces",
+	"version": "1.0.0",
+	"type": "module",
+	"description": "A creatively named trash file manager built for the command line",
+	"main": "bin/feces.js",
+	"bin": {
+		"feces": "bin/feces.js"
+	},
+	"scripts": {
+		"build": "npx tsc",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "Akhil Pillai",
+	"license": "ISC",
+	"dependencies": {
+		"@types/mv": "^2.1.2",
+		"chalk": "^5.2.0",
+		"jsoning": "^0.13.23",
+		"mv": "^2.1.1",
+		"yargs": "^17.7.2"
+	},
+	"devDependencies": {
+		"@types/node": "^18.16.3",
+		"@types/yargs": "^17.0.24"
+	}
+}
