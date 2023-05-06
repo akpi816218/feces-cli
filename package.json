@@ -1,11 +1,11 @@
 {
-	"name": "feces",
+	"name": "feces-cli",
 	"version": "1.0.0",
 	"type": "module",
 	"description": "A creatively named trash file manager built for the command line",
-	"main": "bin/feces.js",
+	"main": "bin/feces-cli.js",
 	"bin": {
-		"feces": "bin/feces.js"
+		"feces": "bin/feces-cli.js"
 	},
 	"scripts": {
 		"build": "npx tsc",
@@ -14,14 +14,16 @@
 	"author": "Akhil Pillai",
 	"license": "ISC",
 	"dependencies": {
-		"@types/mv": "^2.1.2",
+		"as-table": "^1.0.55",
 		"colors": "^1.4.0",
 		"jsoning": "^0.13.23",
 		"mv": "^2.1.1",
-		"yargs": "^17.7.2"
+		"readline-sync": "^1.4.10"
 	},
 	"devDependencies": {
+		"@types/mv": "^2.1.2",
 		"@types/node": "^18.16.3",
-		"@types/yargs": "^17.0.24"
+		"@types/readline-sync": "^1.4.4",
+		"typescript": "^5.0.4"
 	}
 }
