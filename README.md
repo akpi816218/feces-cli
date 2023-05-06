@@ -11,3 +11,5 @@ Install the npm package (`feces-cli`):
 ```bash
 npm i -g feces-cli
 ```
+
+For available commands, run `feces help`.
