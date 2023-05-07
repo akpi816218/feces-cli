@@ -139,11 +139,16 @@ const commandHandlers = {
     },
     init: async () => {
         const home = homedir(), fecespath = join(home, '.feces');
-        log('Initializing the feces environment...');
-        mkdir(fecespath);
-        mkdir(join(fecespath, 'files'));
-        writeFile(join(fecespath, 'info'), '{}');
-        log('Initialization complete.');
+        log('Initializing the feces environment...'.green);
+        try {
+            await mkdir(fecespath);
+            await mkdir(join(fecespath, 'files'));
+            await writeFile(join(fecespath, 'info'), '{}');
+            log('Initialization complete.'.green);
+        }
+        catch (err) {
+            throw new FecesError('Failed to initialize the feces environment; either already initialized, lacking permissions, or other problems.'.red);
+        }
     },
     pie: async () => {
         if (argv.length > 1)
