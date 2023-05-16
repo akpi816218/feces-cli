@@ -1,6 +1,6 @@
 {
 	"name": "feces-cli",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"type": "module",
 	"description": "A creatively named trash file manager built for the command line",
 	"main": "bin/feces-cli.js",
