@@ -5,7 +5,7 @@
 		"darwin"
 	],
 	"types": "internals.d.ts",
-	"version": "1.5.0",
+	"version": "1.5.1",
 	"type": "module",
 	"description": "Internals for feces-cli",
 	"main": "dist/internals.js",
@@ -22,7 +22,6 @@
 	"devDependencies": {
 		"@types/mv": "^2.1.2",
 		"@types/node": "^18.16.6",
-		"@types/readline-sync": "^1.4.4",
 		"typescript": "^5.0.4"
 	}
 }
