@@ -5,7 +5,7 @@
 		"darwin"
 	],
 	"types": "internals.d.ts",
-	"version": "1.5.1",
+	"version": "1.5.2",
 	"type": "module",
 	"description": "Internals for feces-cli",
 	"main": "dist/internals.js",
