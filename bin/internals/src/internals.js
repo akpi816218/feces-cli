@@ -107,16 +107,20 @@ export const commandHandlers = {
         const db = new Database(join(homedir(), '.feces', 'index.json'));
         const ts = Date.now(), name = `${ts}-${file}`, filepath = join(cwd, file), newpath = join(homedir(), '.feces', 'files', name);
         try {
-            await access(file, constants.F_OK | constants.R_OK | constants.W_OK);
+            await access(filepath, constants.F_OK | constants.R_OK | constants.W_OK);
         }
         catch (err) {
-            new FecesError('File does not exist or access is denied.');
+            throw new FecesError('File does not exist or access is denied.');
         }
-        mv(file, newpath, () => { });
-        await db.set(name, {
-            originalPath: filepath,
-            trashedPath: newpath,
-            timestamp: ts
+        mv(filepath, newpath, (error) => {
+            if (error)
+                throw new FecesError('Failed to move file.');
+            else
+                db.set(name, {
+                    originalPath: filepath,
+                    trashedPath: newpath,
+                    timestamp: ts
+                });
         });
         return {
             originalPath: filepath,

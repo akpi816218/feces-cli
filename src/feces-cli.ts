@@ -22,6 +22,7 @@ function toTable(data: any[]): string {
 const localCommandHandlers = {
 	compost: async (duration: string) => {
 		try {
+			if (!duration) duration = '0';
 			await commandHandlers.compost(
 				duration,
 				(msg, data) => {
@@ -92,7 +93,11 @@ const localCommandHandlers = {
 program
 	.command('compost')
 	.description('Compost (permanently delete) all files older than <duration>')
-	.argument('<duration>', 'The cutoff duration to compost files older than')
+	.argument(
+		'[duration]',
+		'The cutoff duration to compost files older than',
+		'0'
+	)
 	.action(localCommandHandlers.compost);
 program
 	.command('init')
