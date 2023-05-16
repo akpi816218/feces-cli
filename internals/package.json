@@ -1,12 +1,14 @@
 {
-	"name": "feces-cli",
-	"version": "1.0.1",
+	"name": "@feces-cli/internals",
+	"os": [
+		"linux",
+		"darwin"
+	],
+	"types": "internals.d.ts",
+	"version": "1.5.0",
 	"type": "module",
-	"description": "A creatively named trash file manager built for the command line",
-	"main": "bin/feces-cli.js",
-	"bin": {
-		"feces": "bin/src/feces-cli.js"
-	},
+	"description": "Internals for feces-cli",
+	"main": "dist/internals.js",
 	"scripts": {
 		"build": "npx tsc",
 		"test": "echo \"Error: no test specified\" && exit 1"
@@ -14,12 +16,8 @@
 	"author": "Akhil Pillai",
 	"license": "ISC",
 	"dependencies": {
-		"as-table": "^1.0.55",
-		"colors": "^1.4.0",
-		"commander": "^10.0.1",
 		"jsoning": "^0.13.23",
-		"mv": "^2.1.1",
-		"readline-sync": "^1.4.10"
+		"mv": "^2.1.1"
 	},
 	"devDependencies": {
 		"@types/mv": "^2.1.2",

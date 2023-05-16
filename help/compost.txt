@@ -1,9 +1,0 @@
-feces compost <number> <unit>
-  Removes old files from the cow pie
-    where `number` is a number
-    and `unit` matches the RegExp: (h|d|w|m|y)
-    h being hours,
-    d being days,
-    w being weeks,
-    m being months
-  Will ask for confirmation

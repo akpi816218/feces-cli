@@ -3,19 +3,16 @@
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
 		"module": "ESNext",
-		"moduleResolution": "node",
-		"outDir": "bin",
+		"moduleResolution": "nodenext",
+		"outDir": "dist",
 		"strict": true,
-		"skipLibCheck": true,
+		"skipLibCheck": false,
 		"target": "ESNext",
 		"lib": [
 			"ESNext"
 		],
 	},
 	"include": [
-		"src/feces-cli.ts"
+		"src/**/*"
 	],
-	"exclude": [
-		"internals/**/*"
-	]
 }
