@@ -15,6 +15,7 @@
 	"license": "ISC",
 	"dependencies": {
 		"as-table": "^1.0.55",
+		"blessed": "^0.1.81",
 		"colors": "^1.4.0",
 		"commander": "^10.0.1",
 		"jsoning": "^0.13.23",
@@ -22,8 +23,9 @@
 		"readline-sync": "^1.4.10"
 	},
 	"devDependencies": {
+		"@types/blessed": "^0.1.21",
 		"@types/mv": "^2.1.2",
-		"@types/node": "^18.16.6",
+		"@types/node": "^18.16.15",
 		"@types/readline-sync": "^1.4.4",
 		"typescript": "^5.0.4"
 	}

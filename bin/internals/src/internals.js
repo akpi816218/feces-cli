@@ -67,7 +67,7 @@ export const commandHandlers = {
         log1(splitdate, toCompost);
         if (verifyFn(toCompost)) {
             for (const [k, v] of toCompost) {
-                await rm(v.trashedPath);
+                await rm(v.trashedPath, { recursive: true });
                 await db.delete(k);
             }
             return true;

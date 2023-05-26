@@ -1,16 +1,19 @@
 #!/usr/bin/env node
 
-import { error, log } from 'console';
-import asTable from 'as-table';
-import { cwd } from 'process';
-import { keyInYN } from 'readline-sync';
-import 'colors';
-import colors from 'colors';
-import { program } from 'commander';
+import { error, log } from 'node:console';
+import asTable from 'npm:as-table';
+import { cwd } from 'node:process';
+// @deno-types=npm:@types/readline-sync
+import { keyInYNStrict } from 'npm:readline-sync';
+import 'npm:colors';
+import colors from 'npm:colors';
+import { program } from 'npm:commander';
+import blessed from 'npm:blessed';
 
-import { commandHandlers } from '../internals/src/internals.js';
+import { commandHandlers } from '../internals/src/internals.ts';
 
 const bold = colors.bold;
+// deno-lint-ignore no-explicit-any
 function toTable(data: any[]): string {
 	return asTable.configure({
 		title: (t) => bold(t),
@@ -40,8 +43,9 @@ const localCommandHandlers = {
 						toTable(table)
 					);
 				},
-				() => !!keyInYN('Are you sure you want to continue?')
+				() => !!keyInYNStrict('Are you sure you want to continue?')
 			);
+			// deno-lint-ignore no-explicit-any
 		} catch (err: any) {
 			error(err.message.red || err);
 		}
@@ -49,9 +53,41 @@ const localCommandHandlers = {
 	init: async () => {
 		try {
 			await commandHandlers.init();
+			// deno-lint-ignore no-explicit-any
 		} catch (err: any) {
 			error(err.message.red || err);
 		}
+	},
+	interactive: async () => {
+		const win = blessed.screen({
+			smartCSR: true,
+			title: 'Feces Interactive',
+			dockBorders: true,
+			fullUnicode: true
+		});
+		win.key(['escape', 'q', 'C-c'], () => win.destroy());
+		const table = blessed.listtable({
+			top: 0,
+			left: 0,
+			width: '100%',
+			height: '100%',
+			border: 'line',
+			tags: true,
+			keys: true,
+			vi: true,
+			mouse: true,
+			align: undefined
+		});
+		table.focus();
+		win.append(table);
+		table.setData([
+			['ID'.yellow, 'Original Path'.yellow],
+			...(await commandHandlers.pie()).map(([key, filedata]) => [
+				key.cyan,
+				filedata.originalPath.blue
+			])
+		]);
+		win.render();
 	},
 	pie: async () => {
 		try {
@@ -63,6 +99,7 @@ const localCommandHandlers = {
 				});
 			if (table.length == 0) log('No plopped files.'.yellow);
 			else log(toTable(table));
+			// deno-lint-ignore no-explicit-any
 		} catch (err: any) {
 			error(err.message.red || err);
 		}
@@ -73,6 +110,7 @@ const localCommandHandlers = {
 				"File '%s' plopped successfully.".green,
 				(await commandHandlers.plop(cwd(), file)).originalPath
 			);
+			// deno-lint-ignore no-explicit-any
 		} catch (err: any) {
 			error(err.message.red || err);
 		}
@@ -84,6 +122,7 @@ const localCommandHandlers = {
 				file,
 				(await commandHandlers.plunge(file)).originalPath
 			);
+			// deno-lint-ignore no-explicit-any
 		} catch (err: any) {
 			error(err.message.red || err);
 		}
@@ -104,6 +143,11 @@ program
 	.description('Initialize the feces environment')
 	.action(localCommandHandlers.init);
 program
+	.command('interactive')
+	.description('Start up an interactive feces session')
+	.aliases(['i', '-i', '--interactive'])
+	.action(localCommandHandlers.interactive);
+program
 	.command('pie')
 	.description('List all plopped files')
 	.action(localCommandHandlers.pie);
@@ -120,6 +164,7 @@ program
 
 try {
 	program.parse();
+	// deno-lint-ignore no-explicit-any
 } catch (err: any) {
 	log(err.message.red || err);
 }
