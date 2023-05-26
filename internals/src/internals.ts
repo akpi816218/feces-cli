@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 
-import { homedir } from 'os';
-import { join } from 'path';
-import { access, constants, mkdir, readFile, rm, writeFile } from 'fs/promises';
-import mv from 'mv';
-import Jsoning from 'jsoning';
+import { homedir } from 'node:os';
+import { join } from 'node:path';
+import { access, mkdir, rm, writeFile } from 'node:fs/promises';
+import { constants } from 'node:fs';
+import mv from 'npm:mv';
+import Jsoning from 'npm:jsoning';
 
 export interface FileData {
 	originalPath: string;
@@ -73,7 +74,7 @@ export const commandHandlers = {
 				join(homedir(), '.feces', 'index.json'),
 				constants.F_OK & constants.W_OK
 			);
-		} catch (err) {
+		} catch (_err) {
 			throw new FecesError('Not initialized');
 		}
 		const db = new Database<FileData>(join(homedir(), '.feces', 'index.json'));
@@ -102,7 +103,7 @@ export const commandHandlers = {
 			await mkdir(join(fecespath, 'files'));
 			await writeFile(join(fecespath, 'index.json'), '{}');
 			return true;
-		} catch (err) {
+		} catch (_err) {
 			throw new FecesError(
 				'Failed to initialize the feces environment; either already initialized, lacking permissions, or other problems.'
 			);
@@ -114,7 +115,7 @@ export const commandHandlers = {
 				join(homedir(), '.feces', 'index.json'),
 				constants.F_OK & constants.W_OK
 			);
-		} catch (err) {
+		} catch (_err) {
 			throw new FecesError('Not initialized');
 		}
 		const db = new Database<FileData>(join(homedir(), '.feces', 'index.json'));
@@ -126,7 +127,7 @@ export const commandHandlers = {
 				join(homedir(), '.feces', 'index.json'),
 				constants.F_OK & constants.W_OK
 			);
-		} catch (err) {
+		} catch (_err) {
 			throw new FecesError('Not initialized');
 		}
 		const db = new Database<FileData>(join(homedir(), '.feces', 'index.json'));
@@ -136,10 +137,10 @@ export const commandHandlers = {
 			newpath = join(homedir(), '.feces', 'files', name);
 		try {
 			await access(filepath, constants.F_OK | constants.R_OK | constants.W_OK);
-		} catch (err) {
+		} catch (_err) {
 			throw new FecesError('File does not exist or access is denied.');
 		}
-		mv(filepath, newpath, (error?) => {
+		mv(filepath, newpath, (error: unknown) => {
 			if (error) throw new FecesError('Failed to move file.');
 			else
 				db.set(name, {
@@ -160,7 +161,7 @@ export const commandHandlers = {
 				join(homedir(), '.feces', 'index.json'),
 				constants.F_OK & constants.W_OK
 			);
-		} catch (err) {
+		} catch (_err) {
 			throw new FecesError('Not initialized');
 		}
 		const db = new Database<FileData>(join(homedir(), '.feces', 'index.json'));

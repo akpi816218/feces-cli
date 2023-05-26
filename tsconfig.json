@@ -10,7 +10,7 @@
 		"target": "ESNext",
 		"lib": [
 			"ESNext"
-		],
+		]
 	},
 	"include": [
 		"src/feces-cli.ts"

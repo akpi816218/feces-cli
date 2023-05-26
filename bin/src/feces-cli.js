@@ -6,6 +6,7 @@ import { keyInYN } from 'readline-sync';
 import 'colors';
 import colors from 'colors';
 import { program } from 'commander';
+import blessed from 'blessed';
 import { commandHandlers } from '../internals/src/internals.js';
 const bold = colors.bold;
 function toTable(data) {
@@ -18,6 +19,8 @@ function toTable(data) {
 const localCommandHandlers = {
     compost: async (duration) => {
         try {
+            if (!duration)
+                duration = '0';
             await commandHandlers.compost(duration, (msg, data) => {
                 log('Composting files older than %s...'.yellow, msg);
                 const table = [];
@@ -42,6 +45,37 @@ const localCommandHandlers = {
         catch (err) {
             error(err.message.red || err);
         }
+    },
+    interactive: async () => {
+        const win = blessed.screen({
+            smartCSR: true,
+            title: 'Feces Interactive',
+            dockBorders: true,
+            fullUnicode: true
+        });
+        win.key(['escape', 'q', 'C-c'], () => win.destroy());
+        const table = blessed.listtable({
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            border: 'line',
+            tags: true,
+            keys: true,
+            vi: true,
+            mouse: true,
+            align: undefined
+        });
+        table.focus();
+        win.append(table);
+        table.setData([
+            ['ID'.yellow, 'Original Path'.yellow],
+            ...(await commandHandlers.pie()).map(([key, filedata]) => [
+                key.cyan,
+                filedata.originalPath.blue
+            ])
+        ]);
+        win.render();
     },
     pie: async () => {
         try {
@@ -86,6 +120,11 @@ program
     .command('init')
     .description('Initialize the feces environment')
     .action(localCommandHandlers.init);
+program
+    .command('interactive')
+    .description('Start up an interactive feces session')
+    .aliases(['i', '-i', '--interactive'])
+    .action(localCommandHandlers.interactive);
 program
     .command('pie')
     .description('List all plopped files')
