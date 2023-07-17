@@ -1,6 +1,6 @@
 {
 	"name": "feces-cli",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"type": "module",
 	"description": "A creatively named trash file manager built for the command line",
 	"main": "bin/feces-cli.js",
@@ -14,6 +14,7 @@
 	"author": "Akhil Pillai",
 	"license": "ISC",
 	"dependencies": {
+		"@feces-cli/internals": "^1.5.3",
 		"as-table": "^1.0.55",
 		"blessed": "^0.1.81",
 		"colors": "^1.4.0",
