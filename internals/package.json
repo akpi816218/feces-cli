@@ -2,10 +2,11 @@
 	"name": "@feces-cli/internals",
 	"os": [
 		"linux",
-		"darwin"
+		"darwin",
+		"android"
 	],
 	"types": "internals.d.ts",
-	"version": "1.5.2",
+	"version": "1.5.3",
 	"type": "module",
 	"description": "Internals for feces-cli",
 	"main": "dist/internals.js",
