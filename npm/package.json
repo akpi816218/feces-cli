@@ -37,6 +37,6 @@
     "@deno/shim-deno": "~0.16.1"
   },
   "devDependencies": {
-    "@types/node": "^20.5.7"
+    "@types/node": "^18.11.9"
   }
 }

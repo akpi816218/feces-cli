@@ -21,7 +21,7 @@ function toTable(data: any[]): string {
 }
 
 // ! Make sure to change the version number in both package.json and src/index.ts
-const version = '1.3.0' as const;
+const version = '1.3.1' as const;
 import fetch from 'npm:npm-registry-fetch';
 
 env.NO_COLOR !== undefined && env.NO_COLOR !== '' && disableColors();
