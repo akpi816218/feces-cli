@@ -1,2 +1,0 @@
-feces-x* filter=lfs diff=lfs merge=lfs -text
-feces filter=lfs diff=lfs merge=lfs -text

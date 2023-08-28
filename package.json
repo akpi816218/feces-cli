@@ -1,33 +1,29 @@
 {
 	"name": "feces-cli",
-	"version": "1.2.1",
+	"version": "1.3.0",
 	"type": "module",
 	"description": "A creatively named trash file manager built for the command line",
-	"main": "bin/feces-cli.js",
-	"bin": {
-		"feces": "bin/src/feces-cli.js"
-	},
 	"scripts": {
-		"build": "npx tsc",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"build": "deno task cache && deno task compile && deno task zip && deno task pack"
 	},
-	"author": "Akhil Pillai",
-	"license": "ISC",
+	"author": {
+		"name": "Akhil Pillai",
+		"email": "feces-cli@akpi.is-a.dev",
+		"url": "https://akpi.is-a.dev"
+	},
+	"license": "GPL-3.0",
 	"dependencies": {
-		"@feces-cli/internals": "^1.5.3",
 		"as-table": "^1.0.55",
-		"blessed": "^0.1.81",
 		"colors": "^1.4.0",
-		"commander": "^10.0.1",
-		"jsoning": "^0.13.23",
+		"commander": "^11.0.0",
 		"mv": "^2.1.1",
-		"readline-sync": "^1.4.10"
+		"readline-sync": "^1.4.10",
+		"typed-jsoning": "^1.0.3"
 	},
 	"devDependencies": {
-		"@types/blessed": "^0.1.21",
 		"@types/mv": "^2.1.2",
-		"@types/node": "^18.16.15",
-		"@types/readline-sync": "^1.4.4",
-		"typescript": "^5.0.4"
+		"@types/node": "^20.5.7",
+		"@types/npm-registry-fetch": "^8.0.4",
+		"@types/readline-sync": "^1.4.4"
 	}
 }
