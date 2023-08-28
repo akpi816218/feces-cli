@@ -12,10 +12,10 @@ await build({
 	},
 	package: {
 		name: 'feces-cli',
-		version: '1.3.0',
+		version: '1.3.1',
 		type: 'module',
 		bin: {
-			feces: './esm/feces-cli.js'
+			feces: 'esm/feces-cli.js'
 		},
 		author: {
 			name: 'Akhil Pillai',

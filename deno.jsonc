@@ -20,7 +20,7 @@
 		"dev": "deno run -A ./src/feces-cli.ts",
 		"cache": "deno cache -r --lock-write ./src/feces-cli.ts",
 		"compile": "rm -drf out && deno compile -o ./out/feces-cli_x86_64-unknown-linux-gnu --target x86_64-unknown-linux-gnu -A ./src/feces-cli.ts && deno compile -o ./out/feces-cli_x86_64-pc-windows-msvc --target x86_64-pc-windows-msvc -A ./src/feces-cli.ts && deno compile -o ./out/feces-cli_x86_64-apple-darwin --target x86_64-apple-darwin -A ./src/feces-cli.ts && deno compile -o ./out/feces-cli_aarch64-apple-darwin --target aarch64-apple-darwin -A ./src/feces-cli.ts && deno compile -o ./out/feces-cli_unknown -A ./src/feces-cli.ts",
-		"pack": "deno run --allow-read --allow-write --allow-env --allow-run ./scripts/pack.ts",
+		"pack": "deno run --allow-read --allow-write --allow-env --allow-run ./scripts/pack.ts && cd npm && ncu -u & npm i",
 		"zip": "deno run --allow-read --allow-write --allow-run ./scripts/zip.ts"
 	}
 }
