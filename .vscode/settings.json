@@ -3,5 +3,8 @@
 	"deno.lint": true,
 	"deno.unstable": false,
 	"editor.defaultFormatter": "denoland.vscode-deno",
-	"prettier.enable": false
+	"prettier.enable": false,
+	"[typescript]": {
+		"editor.defaultFormatter": "denoland.vscode-deno"
+	}
 }

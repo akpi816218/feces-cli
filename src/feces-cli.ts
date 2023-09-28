@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 
+import 'npm:colors';
 import { error, log } from 'node:console';
 import asTable from 'npm:as-table';
 import { cwd, env, exit, stdout } from 'node:process';
 // @deno-types=npm:@types/readline-sync
-import { keyInYNStrict } from 'npm:readline-sync';
+import { keyInYN } from 'npm:readline-sync';
 import 'npm:colors';
 import colors from 'npm:colors';
 import { program } from 'npm:commander';
@@ -14,9 +15,9 @@ const { bold, disable: disableColors } = colors;
 // deno-lint-ignore no-explicit-any
 function toTable(data: any[]): string {
 	return asTable.configure({
-		title: (t) => bold(t),
+		title: (t: string) => bold(t),
 		delimiter: ' | '.yellow,
-		dash: '-'.yellow
+		dash: '-'.yellow,
 	})(data);
 }
 
@@ -27,28 +28,32 @@ import fetch from 'npm:npm-registry-fetch';
 env.NO_COLOR !== undefined && env.NO_COLOR !== '' && disableColors();
 
 const localCommandHandlers = {
-	compost: async (duration: string) => {
+	compost: async (duration: string, { yes }: { yes: boolean }) => {
+		log(yes);
 		try {
-			if (!duration) duration = '0';
-			await commandHandlers.compost(
-				duration,
-				(msg, data) => {
-					log('Composting files older than %s...'.yellow, msg);
-					const table = [];
-					for (const [key, filedata] of data)
-						table.push({
-							id: key.cyan,
-							originalPath: filedata.originalPath.blue
-						});
-					if (table.length == 0) log('No files to compost.'.yellow);
-					log(
-						'The following files will be composted (%d files):\n%s'.yellow,
-						data.length,
-						toTable(table)
-					);
-				},
-				() => !!keyInYNStrict('Are you sure you want to continue?')
-			);
+			duration = duration ?? '0';
+			if (
+				await commandHandlers.compost(
+					duration,
+					(dt, data) => {
+						log('Composting files older than %d...'.yellow, dt);
+						const table = [];
+						for (const [key, filedata] of data) {
+							table.push({
+								id: key.cyan,
+								originalPath: filedata.originalPath.blue,
+							});
+						}
+						if (table.length == 0) log('No files to compost.'.yellow);
+						log(
+							'The following files will be composted (%d files):\n%s'.yellow,
+							data.length,
+							toTable(table),
+						);
+					},
+					() => yes || !!keyInYN('Are you sure you want to continue?'),
+				) === 0
+			) log('No plopped files to compost older than %n.'.yellow, dt);
 			// deno-lint-ignore no-explicit-any
 		} catch (err: any) {
 			error(err.message.red || err);
@@ -98,11 +103,12 @@ const localCommandHandlers = {
 	pie: async () => {
 		try {
 			const table = [];
-			for (const [key, filedata] of await commandHandlers.pie())
+			for (const [key, filedata] of await commandHandlers.pie()) {
 				table.push({
 					id: key.cyan,
-					originalPath: filedata.originalPath.blue
+					originalPath: filedata.originalPath.blue,
 				});
+			}
 			if (table.length == 0) log('No plopped files.'.yellow);
 			else log(toTable(table));
 			// deno-lint-ignore no-explicit-any
@@ -113,8 +119,8 @@ const localCommandHandlers = {
 	plop: async (file: string) => {
 		try {
 			log(
-				"File '%s' plopped successfully.".green,
-				(await commandHandlers.plop(cwd(), file)).originalPath
+				'File \'%s\' plopped successfully.'.green,
+				(await commandHandlers.plop(cwd(), file)).originalPath,
 			);
 			// deno-lint-ignore no-explicit-any
 		} catch (err: any) {
@@ -124,15 +130,15 @@ const localCommandHandlers = {
 	plunge: async (file: string) => {
 		try {
 			log(
-				"File '%s' plunged successfully to '%s'.".green,
+				'File \'%s\' plunged successfully to \'%s\'.'.green,
 				file,
-				(await commandHandlers.plunge(file)).originalPath
+				(await commandHandlers.plunge(file)).originalPath,
 			);
 			// deno-lint-ignore no-explicit-any
 		} catch (err: any) {
 			error(err.message.red || err);
 		}
-	}
+	},
 };
 
 program
@@ -141,8 +147,9 @@ program
 	.argument(
 		'[duration]',
 		'The cutoff duration to compost files older than',
-		'0'
+		'0',
 	)
+	.option('-y|--yes', 'Skip confirmation')
 	.action(localCommandHandlers.compost);
 program
 	.command('init')
@@ -176,25 +183,26 @@ program
 	.action(async () => {
 		stdout.write(
 			`Local installation is tsfm @${version}\n`.green +
-				`Fetching package info from NPM, stand by for up to 5 seconds...\n`.cyan
+				`Fetching package info from NPM, stand by for up to 5 seconds...\n`
+					.cyan,
 		);
 		stdout.write(
 			`tsfm@latest version published on NPM: ${
 				(
 					(await fetch
 						.json('tsfm', {
-							timeout: 5000
+							timeout: 5000,
 						})
 						.catch(() => {
 							stdout.write('Failed to fetch version info from NPM\n');
 							exit(1);
 						})) as unknown as {
-						'dist-tags': {
-							latest: string;
-						};
-					}
+							'dist-tags': {
+								latest: string;
+							};
+						}
 				)['dist-tags'].latest.magenta
-			}\n`.blue
+			}\n`.blue,
 		);
 		exit(0);
 	});

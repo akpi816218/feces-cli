@@ -3,7 +3,8 @@
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 import { access } from 'node:fs/promises';
-import { constants, writeFile } from 'node:fs/promises';
+import { constants } from 'node:fs';
+import { writeFile } from 'node:fs/promises';
 import mv from 'npm:mv';
 import Database from 'npm:typed-jsoning';
 
@@ -49,23 +50,24 @@ export const commandHandlers = {
 	compost: async (
 		duration: string,
 		log1: (benchmarkDate: number, data: [string, FileData][]) => void,
-		verifyFn: (files: [string, FileData][]) => boolean
+		verifyFn: (files: [string, FileData][]) => boolean,
 	): Promise<boolean | 0> => {
 		try {
 			await access(
 				join(homedir(), '.feces', 'index.json'),
-				constants.F_OK & constants.W_OK
+				constants.F_OK & constants.W_OK,
 			);
 		} catch (_err) {
 			throw new FecesError('Not initialized');
 		}
 		const db = new Database<FileData>(join(homedir(), '.feces', 'index.json'));
 		const ts = Date.now();
-		if (!duration.match(/^(\d+)([mhdwMy])$/) && duration != '0')
+		if (!duration.match(/^(\d+)([mhdwMy])$/) && duration != '0') {
 			throw new FecesError(`Invalid duration format (received '${duration}').`);
+		}
 		const splitdate = ts - parseDuration(duration);
 		const toCompost = Object.entries(db.all()).filter(
-			([, v]) => v.timestamp < splitdate
+			([, v]) => v.timestamp < splitdate,
 		);
 		if (toCompost.length == 0) return 0;
 		log1(splitdate, toCompost);
@@ -86,7 +88,7 @@ export const commandHandlers = {
 			return true;
 		} catch (_err) {
 			throw new FecesError(
-				'Failed to initialize the feces environment; either already initialized, lacking permissions, or other problems.'
+				'Failed to initialize the feces environment; either already initialized, lacking permissions, or other problems.',
 			);
 		}
 	},
@@ -94,7 +96,7 @@ export const commandHandlers = {
 		try {
 			await access(
 				join(homedir(), '.feces', 'index.json'),
-				constants.F_OK & constants.W_OK
+				constants.F_OK & constants.W_OK,
 			);
 		} catch (_err) {
 			throw new FecesError('Not initialized');
@@ -106,7 +108,7 @@ export const commandHandlers = {
 		try {
 			await access(
 				join(homedir(), '.feces', 'index.json'),
-				constants.F_OK & constants.W_OK
+				constants.F_OK & constants.W_OK,
 			);
 		} catch (_err) {
 			throw new FecesError('Not initialized');
@@ -123,24 +125,25 @@ export const commandHandlers = {
 		}
 		mv(filepath, newpath, (error: unknown) => {
 			if (error) throw new FecesError('Failed to move file.');
-			else
+			else {
 				db.set(name, {
 					originalPath: filepath,
 					trashedPath: newpath,
-					timestamp: ts
+					timestamp: ts,
 				});
+			}
 		});
 		return {
 			originalPath: filepath,
 			trashedPath: newpath,
-			timestamp: ts
+			timestamp: ts,
 		};
 	},
 	plunge: async (file: string): Promise<FileData> => {
 		try {
 			await access(
 				join(homedir(), '.feces', 'index.json'),
-				constants.F_OK & constants.W_OK
+				constants.F_OK & constants.W_OK,
 			);
 		} catch (_err) {
 			throw new FecesError('Not initialized');
@@ -151,5 +154,5 @@ export const commandHandlers = {
 		mv(fd.trashedPath, fd.originalPath, () => {});
 		await db.delete(file);
 		return fd;
-	}
+	},
 };

@@ -22,8 +22,8 @@
 	},
 	"devDependencies": {
 		"@types/mv": "^2.1.2",
-		"@types/node": "^20.5.7",
-		"@types/npm-registry-fetch": "^8.0.4",
-		"@types/readline-sync": "^1.4.4"
+		"@types/node": "^20.7.1",
+		"@types/npm-registry-fetch": "^8.0.5",
+		"@types/readline-sync": "^1.4.5"
 	}
 }

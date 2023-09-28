@@ -12,7 +12,8 @@ Install the npm package (`feces-cli`):
 npm i -g feces-cli[@latest]
 ```
 
-It is recommended that you add one of the following to your `.bash_aliases` or `.bashrc` (or other shell startup file):
+It is recommended that you add one of the following to your `.bash_aliases` or
+`.bashrc` (or other shell startup file):
 
 ```bash
 alias rm='feces plop'
