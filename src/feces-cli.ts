@@ -10,7 +10,7 @@ import 'npm:colors';
 import colors from 'npm:colors';
 import { program } from 'npm:commander';
 // import blessed from 'npm:blessed';
-import { commandHandlers } from './internals.ts';
+import { commandHandlers, parseDuration } from './internals.ts';
 const { bold, disable: disableColors } = colors;
 // deno-lint-ignore no-explicit-any
 function toTable(data: any[]): string {
@@ -53,7 +53,12 @@ const localCommandHandlers = {
 					},
 					() => yes || !!keyInYN('Are you sure you want to continue?'),
 				) === 0
-			) log('No plopped files to compost older than %n.'.yellow, dt);
+			) {
+				log(
+					'No plopped files to compost older than %n.'.yellow,
+					Date.now() - parseDuration(duration),
+				);
+			}
 			// deno-lint-ignore no-explicit-any
 		} catch (err: any) {
 			error(err.message.red || err);
