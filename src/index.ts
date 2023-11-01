@@ -1,16 +1,16 @@
 #!/usr/bin/env node
 
-import 'npm:colors';
-import { error, log } from 'node:console';
-import asTable from 'npm:as-table';
-import { cwd, env, exit, stdout } from 'node:process';
-// @deno-types=npm:@types/readline-sync
-import { keyInYN } from 'npm:readline-sync';
-import 'npm:colors';
-import colors from 'npm:colors';
-import { program } from 'npm:commander';
-// import blessed from 'npm:blessed';
-import { commandHandlers, parseDuration } from './internals.ts';
+import 'colors';
+import { error } from 'console';
+import asTable from 'as-table';
+import { cwd, env, exit, stderr, stdout } from 'process';
+// @deno-types=@types/readline-sync
+import { keyInYN } from 'readline-sync';
+import 'colors';
+import colors from 'colors';
+import { program } from 'commander';
+// import blessed from 'blessed';
+import { commandHandlers, parseDuration } from './internals';
 const { bold, disable: disableColors } = colors;
 // deno-lint-ignore no-explicit-any
 function toTable(data: any[]): string {
@@ -22,21 +22,19 @@ function toTable(data: any[]): string {
 }
 
 // ! Make sure to change the version number in both package.json and src/index.ts
-const version = '1.3.1' as const;
-import fetch from 'npm:npm-registry-fetch';
+const version = '2.5.0' as const;
+import fetch from 'npm-registry-fetch';
 
 env.NO_COLOR !== undefined && env.NO_COLOR !== '' && disableColors();
 
 const localCommandHandlers = {
 	compost: async (duration: string, { yes }: { yes: boolean }) => {
-		log(yes);
 		try {
 			duration = duration ?? '0';
-			if (
-				await commandHandlers.compost(
+			const f = await commandHandlers.compost(
 					duration,
 					(dt, data) => {
-						log('Composting files older than %d...'.yellow, dt);
+						stdout.write(`Composting files older than ${dt}...\n`.yellow);
 						const table = [];
 						for (const [key, filedata] of data) {
 							table.push({
@@ -44,32 +42,32 @@ const localCommandHandlers = {
 								originalPath: filedata.originalPath.blue,
 							});
 						}
-						if (table.length == 0) log('No files to compost.'.yellow);
-						log(
-							'The following files will be composted (%d files):\n%s'.yellow,
-							data.length,
-							toTable(table),
+						if (table.length == 0) stdout.write('No files to compost.'.yellow);
+						stdout.write(
+							`The following files will be composted (${data.length} files):\n${toTable(table)}\n`.yellow
 						);
 					},
 					() => yes || !!keyInYN('Are you sure you want to continue?'),
-				) === 0
+				)
+			if (
+				f === 0
 			) {
-				log(
-					'No plopped files to compost older than %n.'.yellow,
-					Date.now() - parseDuration(duration),
+				stdout.write(
+					`No plopped files to compost older than ${Date.now() - parseDuration(duration)}.\n`.yellow
 				);
 			}
-			// deno-lint-ignore no-explicit-any
+			else if (f === true) stdout.write('Composted files successfully.\n'.green);
+			else stdout.write('Composting aborted.\n'.yellow);
 		} catch (err: any) {
-			error(err.message.red || err);
+			stderr.write(err.message.red || err);
 		}
 	},
 	init: async () => {
 		try {
 			await commandHandlers.init();
-			// deno-lint-ignore no-explicit-any
+			stdout.write('Feces environment initialized successfully.\n'.green);
 		} catch (err: any) {
-			error(err.message.red || err);
+			stderr.write('Failed to initialize the feces environment.\n');
 		}
 	},
 	/**
@@ -114,8 +112,8 @@ const localCommandHandlers = {
 					originalPath: filedata.originalPath.blue,
 				});
 			}
-			if (table.length == 0) log('No plopped files.'.yellow);
-			else log(toTable(table));
+			if (table.length == 0) stdout.write('No plopped files.\n'.yellow);
+			else stdout.write(toTable(table) + '\n');
 			// deno-lint-ignore no-explicit-any
 		} catch (err: any) {
 			error(err.message.red || err);
@@ -123,9 +121,8 @@ const localCommandHandlers = {
 	},
 	plop: async (file: string) => {
 		try {
-			log(
-				'File \'%s\' plopped successfully.'.green,
-				(await commandHandlers.plop(cwd(), file)).originalPath,
+			stdout.write(
+				`File '${(await commandHandlers.plop(cwd(), file)).originalPath}' plopped successfully.\n`.green
 			);
 			// deno-lint-ignore no-explicit-any
 		} catch (err: any) {
@@ -134,18 +131,16 @@ const localCommandHandlers = {
 	},
 	plunge: async (file: string) => {
 		try {
-			log(
-				'File \'%s\' plunged successfully to \'%s\'.'.green,
-				file,
-				(await commandHandlers.plunge(file)).originalPath,
+			stdout.write(
+				`File '${file}' plunged successfully to '${(await commandHandlers.plunge(file)).originalPath}'.\n`.green,
 			);
-			// deno-lint-ignore no-explicit-any
 		} catch (err: any) {
 			error(err.message.red || err);
 		}
 	},
 };
 
+program.name('feces').version(version);
 program
 	.command('compost')
 	.description('Compost (permanently delete) all files older than <duration>')
@@ -183,7 +178,7 @@ program
 	.action(localCommandHandlers.plunge);
 program
 	.command('version')
-	.description('Print the version of feces-cli')
+	.description('Print the version of feces-cli and check for updates')
 	.aliases(['v', '-v', '--version'])
 	.action(async () => {
 		stdout.write(
@@ -192,7 +187,7 @@ program
 					.cyan,
 		);
 		stdout.write(
-			`tsfm@latest version published on NPM: ${
+			`tsfm@latest version published on  ${
 				(
 					(await fetch
 						.json('tsfm', {
@@ -216,5 +211,5 @@ try {
 	program.parse();
 	// deno-lint-ignore no-explicit-any
 } catch (err: any) {
-	log(err.message.red || err);
+	stderr.write(err.message.red || err);
 }

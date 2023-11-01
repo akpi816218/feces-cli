@@ -1,12 +1,11 @@
 #!/usr/bin/env node
 
-import { homedir } from 'node:os';
-import { join } from 'node:path';
-import { access } from 'node:fs/promises';
-import { constants } from 'node:fs';
-import { writeFile } from 'node:fs/promises';
-import mv from 'npm:mv';
-import Database from 'npm:typed-jsoning';
+import { homedir } from 'os';
+import { join } from 'path';
+import { access, constants, mkdir, rm, writeFile } from 'fs/promises';
+// import { constants } from 'fs';
+import mv from 'mv';
+import Database from 'typed-jsoning';
 
 export interface FileData {
 	originalPath: string;
@@ -73,7 +72,7 @@ export const commandHandlers = {
 		log1(splitdate, toCompost);
 		if (verifyFn(toCompost)) {
 			for (const [k, v] of toCompost) {
-				await Deno.remove(v.trashedPath, { recursive: true });
+				await rm(v.trashedPath, { recursive: true });
 				await db.delete(k);
 			}
 			return true;
@@ -83,7 +82,7 @@ export const commandHandlers = {
 		const home = homedir(),
 			fecespath = join(home, '.feces');
 		try {
-			await Deno.mkdir(join(fecespath, 'files'), { recursive: true });
+			await mkdir(join(fecespath, 'files'), { recursive: true });
 			await writeFile(join(fecespath, 'index.json'), '{}');
 			return true;
 		} catch (_err) {

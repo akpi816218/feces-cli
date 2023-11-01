@@ -4,7 +4,7 @@
 		"forceConsistentCasingInFileNames": true,
 		"module": "ESNext",
 		"moduleResolution": "node",
-		"outDir": "bin",
+		"outDir": "dist",
 		"strict": true,
 		"skipLibCheck": true,
 		"target": "ESNext",
@@ -13,9 +13,6 @@
 		]
 	},
 	"include": [
-		"src/feces-cli.ts"
-	],
-	"exclude": [
-		"internals/**/*"
+		"src/**/*.ts"
 	]
 }
